@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>	
+	<head>
+		<title>Example</title>
+		<script type="text/javascript"src="three.min.js"></script>
+		<script type="text/javascript" src="jquery.js"></script>
+		<script type="text/javascript" src="dat.gui.min.js"></script>
+		<style>
+		body{
+		margin: 0;
+		overflow: hidden;
+		background:black;
+		}
+		</style>
+	</head>
+	<body Onload="f()" onmousemove="f1()">
+		
+		<div id="WebGL-output"></div>
+		<script type="text/javascript">
+
+		function getR(min, max)
+{
+return Math.random() * (max - min+1) + min;
+}	
+
+
+	
+var x,y;		
+		function f() 
+		{
+	
+	var scene = new THREE.Scene();
+	var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight , 0.1, 2000);
+	var renderer = new THREE.WebGLRenderer();
+	renderer.setClearColorHex(0x000000,1.0);
+	renderer.shadowMapEnabled = true;
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	
+	//var axes = new THREE.AxisHelper(600);
+	//scene.add(axes);
+	
+	camera.position.x = 0;
+	camera.position.y = 0;
+	camera.position.z = 600;
+	camera.lookAt(scene.position);
+
+	
+	
+var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(150, 0, 0);
+        spotLight.castShadow = true;
+        scene.add(spotLight);
+
+	
+	
+	
+	var controls = new function() 
+{
+
+	this.camX =0;// 2000;
+	this.camY =0;//983;
+	this.camZ =600;//-14;//600;	
+		
+	}
+
+
+var gui=new dat.GUI();
+
+
+gui.add(controls,'camX').min(-2000).max(2000).step(1);
+gui.add(controls,'camY').min(-2000).max(2000).step(1);
+gui.add(controls,'camZ').min(-2000).max(2000).step(1);
+
+var rotG = new THREE.TorusGeometry(10,10, 8, 16);
+var rotM= new THREE.MeshNormalMaterial();
+
+
+
+
+	var cubeGeometry1 = new THREE.CubeGeometry(50,50,50);
+	var cubeMaterial1 = new THREE.MeshNormalMaterial();
+	
+		var gr=new THREE.Object3D();
+		var gr1=new THREE.Object3D();
+		var i;
+		
+for(i=0;i<150;i++)
+	{
+	var cube1 = new THREE.Mesh(cubeGeometry1, cubeMaterial1);
+	cube1.position.x = Math.random()*700-350;
+	cube1.position.y = Math.random()*700-350;
+	cube1.position.z = Math.random()*2000-1000;
+	cube1.rotation.z=Math.random()*360*180/Math.PI;
+	gr.add(cube1);
+	}
+	scene.add(gr);
+	
+var circleGeometry2 = new THREE.SphereGeometry(10,32);
+var circleMaterial2 = new THREE.MeshNormalMaterial();
+	
+for(i=0;i<150;i++)
+	{
+	var sp = new THREE.Mesh(cubeGeometry1, circleMaterial2);
+	sp.position.x = Math.random()*700-350;
+	sp.position.y = Math.random()*700-350;
+	sp.position.z = Math.random()*2000-1000;
+	sp.rotation.z=Math.random()*360*180/Math.PI;
+	
+	gr1.add(sp);
+	}
+	gr1.position.z=-2000;
+	scene.add(gr1);
+	var st=0;
+
+	
+				function render() {
+
+
+		camera.position.x = controls.camX;
+		camera.position.y = controls.camY;
+		camera.position.z = controls.camZ;
+		camera.lookAt(scene.position);
+
+				
+			gr.position.z+=2;
+			gr1.position.z+=2;
+			
+			gr.rotation.z+=0.001;
+			gr1.rotation.z+=0.001;
+			
+			if(gr.position.z>2000) {gr.position.z=-2000;}
+			
+			if(gr1.position.z>2000) {gr1.position.z=-2000;}
+			
+
+				
+				requestAnimationFrame(render);
+				renderer.render(scene, camera);
+				
+				}	
+	
+		
+	$("#WebGL-output").append(renderer.domElement);
+	render();	
+	renderer.render(scene, camera);	
+
+
+}
+
+
+
+	
+		
+		
+		</script>
+	<div id="demo">	</div>
+		
+	</body >
+</html>
